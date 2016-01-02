@@ -57,7 +57,7 @@ public class RoboVMWebServiceTest {
         assertTrue(r.isSuccess());
         AuthResponse response = r.body();
         assertNotNull(response);
-        assertTrue(response.isSuccess());
+        assertTrue(response.getSuccess());
         assertNotNull(response.getAuthToken());
     }
 
@@ -66,7 +66,7 @@ public class RoboVMWebServiceTest {
         Call<ProductsResponse> call = api.products();
 
         ProductsResponse response = call.execute().body();
-        assertTrue(response.isSuccess());
+        assertTrue(response.getSuccess());
 
         List<Product> products = response.getProducts();
         assertNotNull(products);
@@ -104,7 +104,7 @@ public class RoboVMWebServiceTest {
 
         Call<APIResponse> orderCall = api.order(new OrderRequest(new AuthToken(authToken), new User(), null));
         APIResponse orderResponse = orderCall.execute().body();
-        assertFalse(orderResponse.isSuccess());
+        assertFalse(orderResponse.getSuccess());
 
         List<ValidationError> errors = orderResponse.getErrors();
         assertNotNull(errors);
@@ -144,7 +144,7 @@ public class RoboVMWebServiceTest {
 
         Call<APIResponse> orderCall = api.order(new OrderRequest(new AuthToken(authToken), user, basket));
         APIResponse orderResponse = orderCall.execute().body();
-        assertTrue(orderResponse.isSuccess()
+        assertTrue(orderResponse.getSuccess()
                 || (orderResponse.getErrors().size() == 1 && orderResponse.getErrors().get(0).getMessage()
                         .equals("No more t-shirts for you!")));
     }
