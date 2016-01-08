@@ -21,7 +21,6 @@ import java.io.InputStream
 
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.robovm.store.api.RoboVMWebService.ActionWrapper
 
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.OkHttpClient
@@ -94,7 +93,7 @@ class ImageCache private constructor() {
 
         val destination = File(saveLocation, FilenameUtils.getName(url))
         if (destination.exists()) {
-            ActionWrapper.WRAPPER.invoke(completion, destination)
+            completion(destination)
             return
         }
 
@@ -108,12 +107,12 @@ class ImageCache private constructor() {
                     // Success
                     val `in` = response.body().byteStream()
                     FileUtils.copyInputStreamToFile(`in`, destination)
-                    ActionWrapper.WRAPPER.invoke(completion, destination)
+                    completion(destination)
                 } else if (retryOnFail) {
                     // Error
                     downloadImage(PLACEHOLDER_URL, completion, false)
                 } else {
-                    ActionWrapper.WRAPPER.invoke(completion, null)
+                    completion(null)
                 }
             }
 
@@ -122,7 +121,7 @@ class ImageCache private constructor() {
                 if (retryOnFail) {
                     downloadImage(PLACEHOLDER_URL, completion, false)
                 } else {
-                    ActionWrapper.WRAPPER.invoke(completion, null)
+                    completion(null)
                 }
             }
         })

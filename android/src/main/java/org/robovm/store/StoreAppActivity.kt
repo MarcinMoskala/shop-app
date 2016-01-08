@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.MenuItem
 import org.robovm.store.api.RoboVMWebService
-import org.robovm.store.api.RoboVMWebService.ActionWrapper
 import org.robovm.store.fragments.*
 import org.robovm.store.model.Product
 import org.robovm.store.util.ImageCache
@@ -40,20 +39,16 @@ class StoreAppActivity : Activity() {
 
         super.onCreate(savedInstanceState)
 
-        RoboVMWebService.instance.setup()
-        ActionWrapper.WRAPPER = object : ActionWrapper() {
-            override fun <T> invoke(action: (T?)->Unit, result: T?) {
-                runOnUiThread { action.invoke(result) }
-            }
-        }
-
         setContentView(R.layout.main)
 
         // Retain fragments so don't set home if state is stored.
         if (fragmentManager.backStackEntryCount == 0) {
-            val productFragment = ProductListFragment({ product, itemVerticalOffset -> this.showProductDetail(product, itemVerticalOffset) })
+            val productFragment = ProductListFragment({ product, itemVerticalOffset ->
+                val productDetails = ProductDetailsFragment(product, itemVerticalOffset)
+                FragmentSwitch().switchScreens(fragmentManager, productDetails)
+            })
             baseFragment = productFragment.id
-            switchScreens(productFragment, false, true)
+            FragmentSwitch().switchScreens(fragmentManager, productFragment, false, true)
         }
     }
 
@@ -70,7 +65,7 @@ class StoreAppActivity : Activity() {
     override fun onMenuItemSelected(featureId: Int, item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.cart_menu_item -> {
-                showBasket()
+                FragmentSwitch().switchScreens(fragmentManager, BasketFragment())
                 return true
             }
             android.R.id.home -> {
@@ -89,77 +84,7 @@ class StoreAppActivity : Activity() {
         setupActionBar(fragmentManager.backStackEntryCount != 0)
     }
 
-    fun switchScreens(fragment: Fragment, animated: Boolean = true, isRoot: Boolean = false): Int {
-        val transaction = fragmentManager.beginTransaction()
-
-        if (animated) {
-            transaction.setCustomAnimations(getInAnimationForFragment(fragment), getOutAnimationForFragment(fragment))
-        }
-        transaction.replace(R.id.contentArea, fragment)
-        if (!isRoot) {
-            transaction.addToBackStack(null)
-        }
-
-        setupActionBar(!isRoot)
-
-        return transaction.commit()
-    }
-
-    private fun getInAnimationForFragment(fragment: Fragment): Int {
-        var animIn = R.anim.enter
-
-        when (fragment) {
-            is ProductDetailsFragment -> animIn = R.anim.product_detail_in
-            is BasketFragment -> animIn = R.anim.basket_in
-        }
-        return animIn
-    }
-
-    private fun getOutAnimationForFragment(fragment: Fragment): Int {
-        var animOut = R.anim.exit
-
-        when (fragment) {
-            is ProductDetailsFragment -> animOut = R.anim.product_detail_out
-            is BasketFragment -> {}
-        }
-        return animOut
-    }
-
-    fun showProductDetail(product: Product, itemVerticalOffset: Int) {
-        val productDetails = ProductDetailsFragment(product, itemVerticalOffset)
-        productDetails.setAddToBasketListener { order ->
-            RoboVMWebService.instance.basket.add(order)
-            setupActionBar()
-        }
-        switchScreens(productDetails)
-    }
-
     fun setupActionBar(showUp: Boolean = false) {
         actionBar!!.setDisplayHomeAsUpEnabled(showUp)
-    }
-
-    fun showBasket() {
-        val basket = BasketFragment()
-        basket.setCheckoutListener( Runnable{ this.showLogin() })
-        switchScreens(basket)
-    }
-
-    fun showLogin() {
-        val login = LoginFragment()
-        login.setLoginSuccessListener(Runnable { this.showAddress() })
-        switchScreens(login)
-    }
-
-    fun showAddress() {
-        val shipping = ShippingDetailsFragment(RoboVMWebService.instance.currentUser!!)
-        shipping.setOrderPlacedListener( Runnable { this.orderCompleted() })
-        switchScreens(shipping)
-    }
-
-    fun orderCompleted() {
-        fragmentManager.popBackStack(baseFragment, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        setupActionBar()
-
-        switchScreens(BragFragment(), true, true)
     }
 }

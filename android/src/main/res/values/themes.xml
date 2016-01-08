@@ -54,7 +54,7 @@
     </style>
 
     <style name="RoboButton">
-        <item name="android:background">@drawable/btn_bg</item>
+        <item name="android:background">@drawable/btn_b</item>
         <item name="android:textColor">#ffffff</item>
     </style>
 </resources>

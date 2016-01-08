@@ -47,7 +47,7 @@ class RoboVMWebService private constructor() {
         return this
     }
 
-    fun authenticate(username: String, password: String, completion: (Boolean?) -> Unit) {
+    fun authenticate(username: String, password: String, completion: (Boolean) -> Unit) {
         requireNonNull(username, "username")
         requireNonNull(password, "password")
         requireNonNull(completion, "completion")
@@ -56,7 +56,7 @@ class RoboVMWebService private constructor() {
             if (currentUser == null) {
                 currentUser = User()
             }
-            ActionWrapper.WRAPPER.invoke(completion, true)
+            completion(true)
         } else {
             api!!.auth(AuthRequest(username, password)).enqueue(object : Callback<AuthResponse> {
                 override fun onResponse(response: Response<AuthResponse>, retrofit: Retrofit) {
@@ -73,22 +73,22 @@ class RoboVMWebService private constructor() {
                     if (success) {
                         currentUser = User()
                     }
-                    ActionWrapper.WRAPPER.invoke(completion, success)
+                    completion(success)
                 }
 
                 override fun onFailure(t: Throwable) {
                     t.printStackTrace()
-                    ActionWrapper.WRAPPER.invoke(completion, false)
+                    completion(false)
                 }
             })
         }
     }
 
-    fun getProducts(completion: (List<Product>?)->Unit) {
+    fun getProducts(completion: (List<Product>)->Unit) {
         requireNonNull(completion)
 
         if (products != null) {
-            ActionWrapper.WRAPPER.invoke(completion, products)
+            completion(products!!)
         } else {
             api!!.products().enqueue(object : Callback<ProductsResponse> {
                 override fun onResponse(response: Response<ProductsResponse>, retrofit: Retrofit) {
@@ -104,13 +104,12 @@ class RoboVMWebService private constructor() {
                     if (products == null) {
                         products = ArrayList<Product>()
                     }
-                    ActionWrapper.WRAPPER.invoke(completion, products)
+                    completion(products)
                 }
 
                 override fun onFailure(t: Throwable) {
                     t.printStackTrace()
-
-                    ActionWrapper.WRAPPER.invoke(completion, ArrayList<Product>())
+                    completion(ArrayList<Product>())
                 }
             })
         }
@@ -123,15 +122,15 @@ class RoboVMWebService private constructor() {
         api!!.order(OrderRequest(authToken!!, currentUser!!, basket)).enqueue(object : Callback<APIResponse> {
             override fun onResponse(response: Response<APIResponse>, retrofit: Retrofit) {
                 if (response.isSuccess) {
-                    ActionWrapper.WRAPPER.invoke(completion, response.body())
+                    completion(response.body())
                 } else {
-                    ActionWrapper.WRAPPER.invoke(completion, null)
+                    completion(null)
                 }
             }
 
             override fun onFailure(t: Throwable) {
                 t.printStackTrace()
-                ActionWrapper.WRAPPER.invoke(completion, null)
+                completion(null)
             }
         })
     }
@@ -160,19 +159,6 @@ class RoboVMWebService private constructor() {
 
         @POST("order")
         fun order(@Body body: OrderRequest): Call<APIResponse>
-    }
-
-    abstract class ActionWrapper {
-
-        abstract operator fun <T> invoke(action: (T?)->Unit, result: T?)
-
-        companion object {
-            var WRAPPER: ActionWrapper = object : ActionWrapper() {
-                override operator fun <T> invoke(action: (T?)->Unit, result: T?) {
-                    action.invoke(result)
-                }
-            }
-        }
     }
 
     companion object {

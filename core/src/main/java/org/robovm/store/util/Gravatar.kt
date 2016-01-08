@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
 import com.squareup.okhttp.Callback
-import org.robovm.store.api.RoboVMWebService.ActionWrapper
 
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
@@ -35,20 +34,20 @@ class Gravatar private constructor() {
                     if (code >= 200 && code < 300) {
                         // Success
                         val bytes = response.body().bytes()
-                        ActionWrapper.WRAPPER.invoke(completion, bytes)
+                        completion(bytes)
                     } else {
-                        ActionWrapper.WRAPPER.invoke(completion, null)
+                        completion(null)
                     }
                 }
 
                 override fun onFailure(request: Request, e: IOException) {
                     e.printStackTrace()
-                    ActionWrapper.WRAPPER.invoke(completion, null)
+                    completion(null)
                 }
             })
         } catch (e: IOException) {
             e.printStackTrace()
-            ActionWrapper.WRAPPER.invoke(completion, null)
+            completion(null)
         }
 
     }

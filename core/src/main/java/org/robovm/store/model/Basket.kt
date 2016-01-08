@@ -4,7 +4,7 @@ import java.util.ArrayList
 
 class Basket : Iterable<Order> {
     val orders = ArrayList<Order>()
-    val basketChangeListeners = ArrayList<Runnable>()
+    val basketChangeListeners = ArrayList<()->Unit>()
 
     fun getOrders(): List<Order> {
         return orders
@@ -36,7 +36,7 @@ class Basket : Iterable<Order> {
 
     protected fun onBasketChange() {
         for (r in basketChangeListeners) {
-            r.run()
+            Runnable { r() }.run()
         }
     }
 
@@ -44,7 +44,7 @@ class Basket : Iterable<Order> {
         return orders.iterator()
     }
 
-    fun addOnBasketChangeListener(listener: Runnable) {
+    fun addOnBasketChangeListener(listener: ()->Unit) {
         basketChangeListeners.add(listener)
     }
 

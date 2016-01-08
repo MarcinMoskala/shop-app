@@ -16,6 +16,7 @@
 
 package org.robovm.store.fragments
 
+import android.app.Fragment
 import android.app.ListFragment
 import android.content.Context
 import android.os.Bundle
@@ -25,18 +26,18 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
+import org.jetbrains.anko.*
+import org.robovm.store.FragmentSwitch
 import org.robovm.store.R
 import org.robovm.store.api.RoboVMWebService
 import org.robovm.store.model.Basket
-import org.robovm.store.model.Order
+import org.robovm.store.util.Colors.White
 import org.robovm.store.util.Images
 import org.robovm.store.views.SwipableListItem
 import org.robovm.store.views.ViewSwipeTouchListener
 
-class BasketFragment : ListFragment() {
+class BasketFragment : Fragment() {
     private val basket: Basket
-    private var checkoutButton: Button? = null
-    private var checkoutListener: Runnable? = null
 
     init {
         this.basket = RoboVMWebService.instance.basket
@@ -47,29 +48,51 @@ class BasketFragment : ListFragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): android.view.View? {
-        val shoppingCartView = inflater.inflate(R.layout.basket, container, false)
-
-        checkoutButton = shoppingCartView.findViewById(R.id.checkoutBtn) as Button
-        checkoutButton!!.setOnClickListener { b ->
-            checkoutListener?.run()
-        }
-        shoppingCartView.pivotY = 0f
-        shoppingCartView.pivotX = container!!.width.toFloat()
-
-        return shoppingCartView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onViewCreated(view, savedInstanceState)
-        listView.dividerHeight = 0
-        listView.divider = null
-        listAdapter = GroceryListAdapter(view.context, basket)
-        if (listAdapter.count == 0) {
-            checkoutButton!!.visibility = INVISIBLE
-        }
 
-        basket.addOnBasketChangeListener( Runnable { checkoutButton!!.visibility = if (basket.size() > 0) VISIBLE else INVISIBLE })
+        val listAdapter = GroceryListAdapter(view.context, basket)
+
+        return UI {
+            frameLayout {
+                pivotY = 0f
+                pivotX = container!!.width.toFloat()
+
+                linearLayout {
+                    listView {
+                        dividerHeight = 0
+                        divider = null
+
+                        lparams {
+                            height = matchParent
+                        }
+                    }
+
+                    val checkoutButton = button {
+                        text = "Checkout"
+                        style{
+                            backgroundResource = R.drawable.btn_b
+                            textColor = White
+                        }
+                        lparams {
+                            width = matchParent
+                            height = wrapContent
+                            margin = dip(16)
+                        }
+                        if (listAdapter.count == 0) {
+                            visibility = INVISIBLE
+                        }
+                        onClick {
+                            FragmentSwitch().switchScreens(fragmentManager, LoginFragment())
+                        }
+                    }
+
+                    basket.addOnBasketChangeListener {
+                        checkoutButton.visibility = if (basket.size() > 0) VISIBLE else INVISIBLE
+                    }
+                }
+            }
+        }.view
     }
 
     class GroceryListAdapter(private val context: Context, private val basket: Basket) : BaseAdapter() {
@@ -128,9 +151,5 @@ class BasketFragment : ListFragment() {
 
             return view
         }
-    }
-
-    fun setCheckoutListener(checkoutClickedListener: Runnable) {
-        this.checkoutListener = checkoutClickedListener
     }
 }

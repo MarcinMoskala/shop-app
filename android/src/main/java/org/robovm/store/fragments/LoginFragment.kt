@@ -28,15 +28,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import org.robovm.store.FragmentSwitch
 import org.robovm.store.R
 import org.robovm.store.api.RoboVMWebService
 import org.robovm.store.util.Gravatar
 import org.robovm.store.views.CircleDrawable
 
 class LoginFragment : Fragment() {
-
-    private var loginSuccessListener: Runnable? = null
-
     private var password: EditText? = null
     private var login: Button? = null
     private var imageView: ImageView? = null
@@ -77,18 +75,14 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun setLoginSuccessListener(loginSuccessListener: Runnable) {
-        this.loginSuccessListener = loginSuccessListener
-    }
-
     private fun login(username: String, password: String) {
         val progressDialog = ProgressDialog.show(activity, "Please wait...", "Logging in", true)
         this.login!!.isEnabled = false
         this.password!!.isEnabled = false
 
         RoboVMWebService.instance.authenticate(username, password) { success ->
-            if (success!! && loginSuccessListener != null) {
-                loginSuccessListener!!.run()
+            if (success!!) {
+                FragmentSwitch().switchScreens(fragmentManager, ShippingDetailsFragment(RoboVMWebService.instance.currentUser!!))
             } else {
                 Toast.makeText(activity, "Please verify your RoboVM account credentials and try again",
                         Toast.LENGTH_LONG).show()

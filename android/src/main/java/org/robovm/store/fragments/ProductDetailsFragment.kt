@@ -40,9 +40,6 @@ import java.util.Collections
 import java.util.Random
 
 class ProductDetailsFragment : Fragment, ViewTreeObserver.OnGlobalLayoutListener {
-
-    private var addToBasketListener: ((Order) -> Unit)? = null
-
     private var currentProduct: Product? = null
     private var order: Order? = null
 
@@ -61,9 +58,6 @@ class ProductDetailsFragment : Fragment, ViewTreeObserver.OnGlobalLayoutListener
     private var productDrawable: KenBurnsDrawable? = null
     private var kenBurnsMovement: ValueAnimator? = null
     private var kenBurnsAlpha: ValueAnimator? = null
-
-    constructor() {
-    }
 
     constructor(product: Product, slidingDelta: Int) {
         this.currentProduct = product
@@ -96,7 +90,7 @@ class ProductDetailsFragment : Fragment, ViewTreeObserver.OnGlobalLayoutListener
             order?.productColor = currentProduct!!.colors[colorSpinner!!.selectedItemPosition]
             shouldAnimatePop = true
             activity.fragmentManager.popBackStack()
-            addToBasketListener?.invoke(Order(order!!))
+            RoboVMWebService.instance.basket.add(Order(order!!))
         }
 
         (view.findViewById(R.id.productTitle) as TextView).text = currentProduct!!.name
@@ -141,7 +135,7 @@ class ProductDetailsFragment : Fragment, ViewTreeObserver.OnGlobalLayoutListener
 
         val basket = RoboVMWebService.instance.basket
         basketBadge!!.count = basket.size()
-        basket.addOnBasketChangeListener ( Runnable{ basketBadge!!.setCountAnimated(basket.size()) })
+        basket.addOnBasketChangeListener { basketBadge!!.setCountAnimated(basket.size()) }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -334,10 +328,6 @@ class ProductDetailsFragment : Fragment, ViewTreeObserver.OnGlobalLayoutListener
         val next = currentIndex + 1
         val image = images[next]
         ImageCache.instance.downloadImage(image) { f -> }
-    }
-
-    fun setAddToBasketListener(f : (Order) -> Unit) {
-        this.addToBasketListener = f
     }
 
     companion object {

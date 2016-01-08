@@ -83,7 +83,7 @@ class ProductListFragment(val productSelectionListener: (Product, Int)-> Unit) :
             basketBadge!!.count = basket.size()
         }
         badgeCount = basket.size()
-        basket.addOnBasketChangeListener( Runnable { basketBadge!!.setCountAnimated(basket.size()) })
+        basket.addOnBasketChangeListener { basketBadge!!.setCountAnimated(basket.size()) }
 
         super.onCreateOptionsMenu(menu, inflater)
     }

@@ -17,12 +17,14 @@
 package org.robovm.store.fragments
 
 import android.app.Fragment
+import android.app.FragmentManager
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import org.robovm.store.FragmentSwitch
 import org.robovm.store.R
 import org.robovm.store.api.RoboVMWebService
 import org.robovm.store.api.ValidationError
@@ -33,7 +35,6 @@ import org.robovm.store.util.Countries
 import java.util.ArrayList
 
 class ShippingDetailsFragment @JvmOverloads constructor(private val user: User = User()) : Fragment() {
-
     private var firstNameField: EditText? = null
     private var lastNameField: EditText? = null
     private var address1Field: EditText? = null
@@ -43,8 +44,6 @@ class ShippingDetailsFragment @JvmOverloads constructor(private val user: User =
     private var stateField: AutoCompleteTextView? = null
     private var phoneNumberField: EditText? = null
     private var countryField: AutoCompleteTextView? = null
-
-    private var orderPlacedListener: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,9 +148,10 @@ class ShippingDetailsFragment @JvmOverloads constructor(private val user: User =
 
                 Toast.makeText(activity, "Your order has been placed!", Toast.LENGTH_LONG).show()
 
-                if (orderPlacedListener != null) {
-                    orderPlacedListener!!.run()
-                }
+//                TODO
+//                fragmentManager.popBackStack(baseFragment, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                actionBar!!.setDisplayHomeAsUpEnabled(showUp)
+                FragmentSwitch().switchScreens(fragmentManager, BragFragment())
             } else {
                 val errors = response!!.errors
                 var alertMessage = "An unexpected error occurred! Please try again later!"
@@ -180,9 +180,5 @@ class ShippingDetailsFragment @JvmOverloads constructor(private val user: User =
                 Toast.makeText(activity, alertMessage, Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    fun setOrderPlacedListener(orderPlacedListener: Runnable) {
-        this.orderPlacedListener = orderPlacedListener
     }
 }
