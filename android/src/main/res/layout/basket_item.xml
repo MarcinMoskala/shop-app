@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.robovm.store.views.SwipableListItem xmlns:android="http://schemas.android.com/apk/res/android"
+<pl.marcinmoskala.store.views.SwipableListItem xmlns:android="http://schemas.android.com/apk/res/android"
                                          android:layout_width="match_parent"
                                          android:layout_height="wrap_content"
                                          android:id="@+id/SwipeContainer">
@@ -108,4 +108,4 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"/>
     </LinearLayout>
-</org.robovm.store.views.SwipableListItem>
+</pl.marcinmoskala.store.views.SwipableListItem>

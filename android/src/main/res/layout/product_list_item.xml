@@ -2,13 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:orientation="vertical"
              android:layout_width="fill_parent"
-             android:layout_height="350dp">
+             android:layout_height="250dp">
     <ImageView
             android:src="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/productImage"
-            android:scaleType="centerCrop"/>
+            android:id="@+id/productImage"/>
     <LinearLayout
             android:orientation="vertical"
             android:minWidth="25px"
@@ -64,9 +63,4 @@
                 android:id="@+id/view2"
                 android:background="@drawable/discrete_shadow"/>
     </LinearLayout>
-    <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/productImageSpinner"
-            android:layout_gravity="center"/>
 </FrameLayout>

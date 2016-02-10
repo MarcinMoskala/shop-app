@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.robovm.store">
+          package="pl.marcinmoskala.store">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+            android:name=".App"
             android:allowBackup="true"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
             android:largeHeap="true"
             android:theme="@style/RoboActionBarTheme">
         <activity
-                android:name=".StoreAppActivity"
+                android:name=".presentation.mainactivity.StoreAppActivity"
                 android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
