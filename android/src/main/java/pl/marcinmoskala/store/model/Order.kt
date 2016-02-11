@@ -15,4 +15,7 @@
  */
 package pl.marcinmoskala.store.model
 
-data class Order(val product: Product, var size: ProductSize = product.sizes[0])
+data class Order(
+        val product: Product,
+        var size: ProductSize = product.sizes[0]
+)

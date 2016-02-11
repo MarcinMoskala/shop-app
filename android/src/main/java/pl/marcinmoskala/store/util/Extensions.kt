@@ -3,6 +3,8 @@ package pl.marcinmoskala.store.util
 import android.app.Activity
 import android.app.Fragment
 import android.app.FragmentManager
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import pl.marcinmoskala.store.App
 import pl.marcinmoskala.store.R
 import pl.marcinmoskala.store.presentation.basket.BasketFragment
@@ -19,6 +21,8 @@ fun Activity.switchScreen(fragment: Fragment, animated: Boolean = true, isRoot: 
 fun Fragment.pref() = (this.activity.application as App).sharedPreferences
 fun Fragment.getSavedString(key: String, defVal: String) = pref().getString(key, defVal)
 fun Fragment.saveString(key: String, value: String) = pref().edit().putString(key, value).commit()
+
+fun Fragment.toast(text: String) = Toast.makeText(activity, text, LENGTH_LONG).show()
 
 fun switchScreen(fragmentManager: FragmentManager, fragment: Fragment, animated: Boolean = true, isRoot: Boolean = false) {
     val transaction = fragmentManager.beginTransaction()

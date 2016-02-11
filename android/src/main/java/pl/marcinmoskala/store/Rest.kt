@@ -13,49 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.marcinmoskala.store.api
+package pl.marcinmoskala.store
 
-import android.content.Context
-import com.bumptech.glide.Glide
-import pl.marcinmoskala.store.APP
-import pl.marcinmoskala.store.MUG
-import pl.marcinmoskala.store.NRISE
-import pl.marcinmoskala.store.TSHIRT
-import pl.marcinmoskala.store.model.Basket
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.logging.HttpLoggingInterceptor
+import com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.BODY
 import pl.marcinmoskala.store.model.Product
-import pl.marcinmoskala.store.model.User
 import retrofit.GsonConverterFactory
 import retrofit.Retrofit
 import retrofit.RxJavaCallAdapterFactory
-import retrofit.http.Body
 import retrofit.http.GET
-import retrofit.http.POST
 import rx.Observable
 
 class Rest private constructor() {
+    val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
+            .apply { setLevel(BODY) };
+    val client: OkHttpClient = OkHttpClient()
+            .apply { interceptors().add(interceptor) }
+
     var api: RestAPI = Retrofit.Builder()
             .baseUrl(API_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build()
             .create<RestAPI>(RestAPI::class.java)
 
-    fun getProducts(completion: (List<Product>)->Unit) =
-            completion(listOf(NRISE, MUG, TSHIRT, APP))
-
     interface RestAPI {
-        @POST("auth")
-        fun auth(@Body body: AuthRequest): Observable<AuthResponse>
-
         @GET("products")
-        fun products(): Observable<ProductsResponse>
-
-        @POST("order")
-        fun order(@Body body: OrderRequest): Observable<APIResponse>
+        fun getProducts(): Observable<List<Product>>
     }
 
     companion object {
         val instance = Rest()
-        private val API_URL = "https://store-app.robovm.com/test/"
+        private val API_URL = "http://nootro.pl/api/"
     }
 }

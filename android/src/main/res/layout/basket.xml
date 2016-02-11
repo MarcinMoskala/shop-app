@@ -2,25 +2,24 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="fill_parent"
              android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:id="@android:id/list"/>
+                android:id="@android:id/list"
+            android:layout_above="@+id/checkoutBtn" />
         <Button
-                style="@style/RoboButton"
-                android:text="Checkout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkoutBtn"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"/>
-    </LinearLayout>
+            style="@style/RoboButton"
+            android:text="Checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkoutBtn"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
     <LinearLayout
             android:orientation="vertical"
             android:minWidth="25px"

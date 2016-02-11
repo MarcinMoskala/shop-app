@@ -25,7 +25,6 @@ import android.widget.*
 import butterknife.bindView
 import com.bumptech.glide.Glide
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.api.Rest
 import pl.marcinmoskala.store.basket
 import pl.marcinmoskala.store.model.Order
 import pl.marcinmoskala.store.model.Product

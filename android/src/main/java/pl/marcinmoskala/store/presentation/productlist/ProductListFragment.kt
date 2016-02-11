@@ -20,15 +20,20 @@ import android.app.ListFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ListView
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.api.Rest
+import pl.marcinmoskala.store.Rest
 import pl.marcinmoskala.store.basket
 import pl.marcinmoskala.store.presentation.product.ProductDetailsFragment
 import pl.marcinmoskala.store.util.switchScreen
+import pl.marcinmoskala.store.util.toast
 import pl.marcinmoskala.store.views.BadgeDrawable
+import rx.android.schedulers.AndroidSchedulers
+import rx.android.schedulers.AndroidSchedulers.mainThread
 
+import rx.schedulers.Schedulers.io
 class ProductListFragment : ListFragment() {
     private var basketBadge: BadgeDrawable? = null
     private var badgeCount: Int = 0
@@ -49,9 +54,15 @@ class ProductListFragment : ListFragment() {
 
         if(listAdapter == null){
             listAdapter = ProductListAdapter(view.context)
-            Rest.instance.getProducts {
-                listAdapter = ProductListAdapter(view.context, it)
-            }
+            Rest.instance.api.getProducts()
+                .subscribeOn(io())
+                .observeOn(mainThread())
+                .subscribe({
+                    listAdapter = ProductListAdapter(view.context, it)
+                },{
+                    Log.e("Request error", it.message, it)
+                    toast(it.toString())
+                })
         }
     }
 

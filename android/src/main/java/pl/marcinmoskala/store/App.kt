@@ -1,11 +1,7 @@
 package pl.marcinmoskala.store
 
 import android.app.Application
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
-
 import com.securepreferences.SecurePreferences
-
 import java.security.GeneralSecurityException
 
 class App : Application() {

@@ -30,7 +30,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import butterknife.bindView
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.model.User
 import pl.marcinmoskala.store.presentation.shipping.ShippingDetailsFragment
 import pl.marcinmoskala.store.util.Gravatar
 import pl.marcinmoskala.store.util.switchScreen

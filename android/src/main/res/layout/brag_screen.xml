@@ -14,7 +14,7 @@
             android:id="@+id/imageView1"
             android:layout_gravity="center"/>
     <TextView
-            android:text="Order Complete"
+            android:text="Dokonano zamówienia"
             style="@style/RoboTitleText"/>
     <TextView
             android:text="We've received your order and we'll email you as soon as your items ship."

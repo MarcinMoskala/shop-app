@@ -1,23 +1,16 @@
 package pl.marcinmoskala.store.presentation.productlist
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.SimpleTarget
-import org.jetbrains.anko.imageBitmap
 import pl.marcinmoskala.store.R
 import pl.marcinmoskala.store.model.Product
-import java.util.*
 
 class ProductListAdapter(private val context: Context, var products: List<Product> = listOf()) : BaseAdapter() {
     private val appearInterpolator = DecelerateInterpolator()

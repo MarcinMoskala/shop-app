@@ -25,10 +25,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.api.Rest
 import pl.marcinmoskala.store.basket
-import pl.marcinmoskala.store.model.Basket
-import pl.marcinmoskala.store.presentation.login.LoginFragment
 import pl.marcinmoskala.store.presentation.shipping.ShippingDetailsFragment
 import pl.marcinmoskala.store.util.switchScreen
 

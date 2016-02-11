@@ -21,10 +21,15 @@ import android.content.Intent
 import android.content.Intent.ACTION_SEND
 import android.content.Intent.EXTRA_TEXT
 import android.os.Bundle
+import android.view.Gravity.CENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.jetbrains.anko.*
 import pl.marcinmoskala.store.R
+import pl.marcinmoskala.store.appStyle
+import pl.marcinmoskala.store.subtitleStyle
+import pl.marcinmoskala.store.titleStyle
 
 class BragFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +38,22 @@ class BragFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.brag_screen, null).apply {
-            findViewById(R.id.bragButton).setOnClickListener { v -> bragOnTwitter() }
-        }
+        UI {
+            verticalLayout {
+                padding = dip(16)
 
-    private fun bragOnTwitter() {
+                imageView(R.drawable.complete)
+                        .lparams {gravity = CENTER}
+                textView(R.string.brag_big)
+                        .style ( titleStyle )
+                textView(R.string.brag_long)
+                        .style ( subtitleStyle )
+                button(R.string.brag_to_friends)
+                        .setOnClickListener { v -> brag() }
+            }.style(appStyle)
+        }.view
+
+    private fun brag() {
         val message = ""
 
         try {

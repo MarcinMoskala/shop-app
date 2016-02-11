@@ -25,10 +25,9 @@ class Product(
         val imageUrls: List<String>,
         val sizes: List<ProductSize>
 ) {
-        val rand = Random()
         val imageUrl: String
                 get() = if(imageUrls.size > 0)
-                        imageUrls[rand.nextInt(imageUrls.size)]
+                        imageUrls[0]
                 else
                         UNKNOWN_IMAGE_URL
 

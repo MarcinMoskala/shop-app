@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">RoboVM Store App</string>
+    <string name="app_name">Nootro Sklep</string>
     <string name="brag_on">Brag on:</string>
     <string name="brag_to_friends">Brag to Friends</string>
+    <string name="place_order">Złóż zamówienie</string>
+    <string name="brag_big">Dokonano zamówienia</string>
+    <string name="brag_long">Otrzymaliśmy twoje zamówienie i napiszemy jak tylko będziemy mogli je zrealizować.</string>
 </resources>

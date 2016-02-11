@@ -17,28 +17,18 @@
 package pl.marcinmoskala.store.presentation.shipping
 
 import android.app.Fragment
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
-import android.widget.Toast
 import com.jakewharton.rxbinding.widget.RxTextView
 import org.jetbrains.anko.*
-import pl.marcinmoskala.store.App
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.api.OrderRequest
-import pl.marcinmoskala.store.api.Rest
-import pl.marcinmoskala.store.basket
-import pl.marcinmoskala.store.model.User
+import pl.marcinmoskala.store.appStyle
 import pl.marcinmoskala.store.presentation.brag.BragFragment
 import pl.marcinmoskala.store.util.getSavedString
-import pl.marcinmoskala.store.util.pref
 import pl.marcinmoskala.store.util.saveString
 import pl.marcinmoskala.store.util.switchScreen
-import rx.Observable
 
 class ShippingDetailsFragment : Fragment() {
     private val fieldNames = listOf("phone", "firstName", "lastName", "address", "city", "zipCode")
@@ -48,19 +38,18 @@ class ShippingDetailsFragment : Fragment() {
         retainInstance = true
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         UI {
             verticalLayout {
                 textView("Dane do wysyłki")
                 val fieldViews = fieldNames.map { it to editText(getSavedString(it,"")) }
-                button(R.id.placeOrder).setOnClickListener { b -> }
+                button(R.string.place_order).setOnClickListener { b -> switchScreen(BragFragment())}
 
                 for((key, view) in fieldViews) {
                     RxTextView.textChanges(view)
                             .map {it.toString()}
                             .subscribe { m -> saveString(key, m) }
                 }
-            }
+            }.style(appStyle)
         }.view
 }

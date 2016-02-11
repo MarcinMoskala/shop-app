@@ -15,6 +15,9 @@
  */
 package pl.marcinmoskala.store.model
 
-class ProductSize (val id: String = "", val name: String = ""){
+class ProductSize (
+        val id: String = "",
+        val name: String = ""
+){
     override fun toString(): String = name
 }

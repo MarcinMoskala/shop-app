@@ -19,13 +19,9 @@ package pl.marcinmoskala.store.presentation.mainactivity
 import android.app.Activity
 import android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.MenuItem
 import pl.marcinmoskala.store.R
-import pl.marcinmoskala.store.api.Rest
-import pl.marcinmoskala.store.model.Product
 import pl.marcinmoskala.store.presentation.basket.BasketFragment
-import pl.marcinmoskala.store.presentation.product.ProductDetailsFragment
 import pl.marcinmoskala.store.presentation.productlist.ProductListFragment
 import pl.marcinmoskala.store.util.switchScreen
 
